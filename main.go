@@ -48,9 +48,10 @@ func main() {
 		}
 
 		var userCred = UserCredential{}
-		sql := fmt.Sprintf("SELECT * FROM user_credentials where user_name='%s' and user_password='%s'", login.User, login.Password)
+		sql := "SELECT * FROM user_credentials where user_name=$1 and user_password=$2"
 		fmt.Println(sql)
-		err := conn.Get(&userCred, sql)
+
+		err := conn.Get(&userCred, sql, login.User, login.Password)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 			return
